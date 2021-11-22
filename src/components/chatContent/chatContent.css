@@ -87,7 +87,6 @@
 }
 .chat__msg {
   user-select: none;
-  margin-top: -15px;
 }
 
 .chat__item.other {
