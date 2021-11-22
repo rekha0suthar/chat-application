@@ -81,7 +81,7 @@ export default class ChatContent extends Component {
   componentDidMount() {
     window.addEventListener("keydown", (e) => {
       if (e.keyCode === 13) {
-        if (this.state.msg !== "") {
+        if (this.state.msg !== "" || this.state.file !== null) {
           const date = new Date();
           var hours = date.getHours();
           var minutes = date.getMinutes();
@@ -112,11 +112,43 @@ export default class ChatContent extends Component {
     this.setState({ msg: e.target.value, uploadedImage: this.state.file });
   };
 
+  // resizeFile = (file) =>
+  //   new Promise((resolve) => {
+  //     Resizer.imageFileResizer(
+  //       file,
+  //       100,
+  //       100,
+  //       "JPEG",
+  //       100,
+  //       0,
+  //       (uri) => {
+  //         resolve(uri);
+  //       },
+  //       "base64"
+  //     );
+  //   });
+
   handleFileUpload = (event) => {
-    console.log(URL.createObjectURL(event.target.files[0]));
-    this.setState({
-      file: URL.createObjectURL(event.target.files[0]),
+    const date = new Date();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes + " " + ampm;
+    this.chatItms.push({
+      key: 1,
+      type: "",
+      date: strTime,
+      uploadedImage: URL.createObjectURL(event.target.files[0]),
+      msg: this.state.msg,
+      image:
+        "https://pbs.twimg.com/profile_images/1116431270697766912/-NfnQHvh_400x400.jpg",
     });
+    this.setState({ chat: [...this.chatItms] });
+    this.setState({ msg: "" });
+    this.scrollToBottom();
   };
 
   render() {
@@ -182,3 +214,4 @@ export default class ChatContent extends Component {
     );
   }
 }
+
